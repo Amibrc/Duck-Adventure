@@ -1,0 +1,1 @@
+print("Objects and props loaded")
