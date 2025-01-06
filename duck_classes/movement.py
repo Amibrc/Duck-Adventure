@@ -23,6 +23,7 @@ class MovementDuck():
         self.moved_x = False
         self.moved_y = False
 
+
     def move(self, keys, objects):
         if keys[pygame.K_d] and self.duck_rect.right < self.ground_right:
             self.move_right(objects)
@@ -148,21 +149,16 @@ class MovementDuck():
         elif collision_data["object"].type == "moved":
             if collision_data["on_object"]:
                 if collision_data["object"].speed_x:
-                    #self.duck_rect.x += collision_data["object"].speed_x
                     self.move_horizontally_on_platform(collision_data["object"].speed_x)
-                if collision_data["object"].speed_y and not self.moved_y:
-                    #self.duck_rect.bottom = collision_data["obj_rect"].top
-                    self.duck_rect.y += collision_data["object"].speed_y
-                    self.moved_y = True
+                if collision_data["object"].speed_y:
+                    self.move_vertically_on_platform(collision_data["object"].speed_y)
                 self.on_platform = True
             elif collision_data["collision_sides"]["bottom"]:
                 if collision_data["object"].speed_x:
-                    #self.duck_rect.x += collision_data["object"].speed_x
                     self.move_horizontally_on_platform(collision_data["object"].speed_x)
-                if collision_data["object"].speed_y and not self.moved_y:
+                if collision_data["object"].speed_y:
                     self.duck_rect.bottom = collision_data["obj_rect"].top
-                    self.duck_rect.y += collision_data["object"].speed_y
-                    self.moved_y = True
+                    self.move_vertically_on_platform(collision_data["object"].speed_y)
                     self.vector_speed_vertical = 0
                     self.states["is_jumping"] = False
                 self.on_platform = True
@@ -218,13 +214,27 @@ class MovementDuck():
             step = 1 if speed_x > 0 else -1
 
             while remaining_distance:
-                if self.duck_rect.right < self.ground_right and self.duck_rect.left > 0:
+                if (self.duck_rect.right < self.ground_right and step > 0) or (self.duck_rect.left > 0 and step < 0):
                     self.duck_rect.x += step
                     remaining_distance -= 1
                     self.moved_x = True
                 else:
                     return
+            
+            
+    def move_vertically_on_platform(self, speed_y):
+        if not self.moved_y:
+            remaining_distance = abs(speed_y)
+            step = 1 if speed_y > 0 else -1
 
+            while remaining_distance:
+                if self.duck_rect.bottom < self.ground_bottom:
+                    self.duck_rect.y += step
+                    remaining_distance -= 1
+                    self.moved_y = True
+                else:
+                    return
+            
 
     def get_speed(self):
         if self.states["is_crouching"]:

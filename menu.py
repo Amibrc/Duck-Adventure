@@ -24,7 +24,6 @@ class GameMenu():
         self.last_pressed_button_time = 0
         self.animation_button_time = 1000
 
-
     def draw(self, surface):
         self.background.fill((255, 255, 255))
         self.background.blit(self.current_start_button, self.current_start_button_rect)
@@ -32,13 +31,11 @@ class GameMenu():
         self.background.blit(self.current_quit_button, self.current_quit_button_rect)
         surface.blit(self.background, (0, 0))
 
-        
     def create_background(self, width, height):
         background = pygame.Surface((width, height))
         background.fill((255, 255, 255))
         return background
     
-
     def update(self, mouse_pos, mouse_pressed):
         start_button_state = self.update_button_state(mouse_pos, mouse_pressed, self.start_buttons, self.current_start_button_rect)
         if start_button_state == "static":
@@ -70,7 +67,6 @@ class GameMenu():
 
         return "game_menu"
     
-
     def update_button_state(self, mouse_pos, mouse_pressed, buttons, current_rect):
         if current_rect.collidepoint(mouse_pos):
             if mouse_pressed[0]:
@@ -80,15 +76,5 @@ class GameMenu():
                 return "hover"
         else:
             return "static"
-
-
-    def update_to_videoresize(self, width, height):
-        self.width = width
-        self.height = height
-        self.background = pygame.Surface((width, height))
-        self.background.fill((255, 255, 255))
-        self.current_start_button_rect.center = (width // 2, height // 3)
-        self.current_settings_button_rect.center = (width // 2, height // 1.7)
-        self.current_quit_button_rect.center = (width // 2, height // 1.2)
 
     
