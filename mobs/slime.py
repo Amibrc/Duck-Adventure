@@ -1,20 +1,97 @@
-from config import SLIME_WALKING_PATH, SLIME_DEATH_PATH
+import pygame
+from config.images import SLIME_WALKING_IMAGES, SLIME_DEATH_IMAGES
+from tools import create_frames
 
 class Slime():
-    def __init__(self, centerx, bottom, ground_left, ground_right):
+    def __init__(self, centerx, bottom, speed, ground_left, ground_right):
         self.centerx = centerx
         self.bottom = bottom
         self.ground_left = ground_left
         self.ground_right = ground_right
-        self.speed = 2
-        self.type = "slime"
+        self.speed = speed
         self.alive = True
+        self.type = "slime"
+
+        self.states  = {
+            "direction_right": speed > 0,
+            "direction_left": speed < 0,
+            "is_walking": True,
+            "is_death": False
+        }
+
+        self.animation_frames = {
+            "walking": create_frames(SLIME_WALKING_IMAGES),
+            "death": create_frames(SLIME_DEATH_IMAGES)
+        }
+
+        self.current_frames = {
+            "walking": 0,
+            "death": 0
+        }
+
+        self.current_frame_slime = self.animation_frames["walking"]["right"][0]
+
+        self.last_animation_walking_time = 0
+        self.last_animation_death_time = 0
+
+        self.animation_walking_interval = 200
+        self.animation_death_interval = 300
+
+        self.object_rect = self.animation_frames["walking"]["right"][0].get_rect(centerx=centerx, bottom=bottom)
+
+
+    def draw(self, surface):
+        surface.blit(self.current_frame_slime, self.object_rect)
+
+
+    def update(self):
+        if self.alive:
+            self.update_walking_animation()
+            self.move()
+        else:
+            self.update_death_animation()
+    
+
+    def update_walking_animation(self):
+        frames = self.animation_frames["walking"][self.get_direction()]
+
+        if pygame.time.get_ticks() - self.last_animation_walking_time >= self.animation_walking_interval:
+            self.current_frames["walking"] = (self.current_frames["walking"] + 1) % len(frames)
+            self.current_frame_slime = frames[self.current_frames["walking"]]
+            self.object_rect = self.current_frame_slime.get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
+            self.last_animation_walking_time = pygame.time.get_ticks()
+    
+
+    def update_death_animation(self):
+        frames = self.animation_frames["death"][self.get_direction()]
+
+        if pygame.time.get_ticks() - self.last_animation_death_time >= self.animation_death_interval:
+            self.current_frames["death"] = (self.current_frames["death"] + 1) % len(frames)
+            self.object_rect = frames[self.current_frames["death"]].get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
+            self.current_frame_slime = frames[self.current_frames["death"]]
+            self.last_animation_death_time = pygame.time.get_ticks()
 
 
     def move(self):
-        self.centerx += self.speed
-        if self.centerx < self.ground_left or self.centerx > self.ground_right:
+        self.object_rect.x += self.speed
+        if self.object_rect.right > self.ground_right:
+            self.object_rect.right = self.ground_right
             self.speed = -self.speed
+            self.states["direction_right"] = not self.states["direction_right"]
+            self.states["direction_left"] = not self.states["direction_left"]
+        elif self.object_rect.left < self.ground_left:
+            self.object_rect.left = self.ground_left
+            self.speed = -self.speed
+            self.states["direction_right"] = not self.states["direction_right"]
+            self.states["direction_left"] = not self.states["direction_left"]
+    
+
+    def get_direction(self):
+        if self.states["direction_right"]:
+            return "right"
+        elif self.states["direction_left"]:
+            return "left"
+
         
     
 

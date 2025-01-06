@@ -7,6 +7,7 @@ from config.images import RED_BRICK_IMAGE, GREY_BRICK_IMAGE, STONE_IMAGE, GAME_I
 from objects.base import StaticObject, MovedObject
 from objects.coin import Coin
 from objects.diamond import Diamond
+from mobs.slime import Slime
 from menu import GameMenu
 
 pygame.font.init()
@@ -77,9 +78,9 @@ objects = [
     Coin(264, SCREEN_HEIGHT - 72, 0, 1, 0, 0, SCREEN_HEIGHT - 72, SCREEN_HEIGHT - 102),
     Coin(40, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 30),
     Coin(30, SCREEN_HEIGHT - 260, 0, 1, 0, 0, SCREEN_HEIGHT - 252, SCREEN_HEIGHT - 252-30),
-    Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 332-40)
+    Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 332-40),
+    Slime(200, SCREEN_HEIGHT - 72, 1, 150, 278)
 ]
-
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Duck Adventure")
@@ -106,7 +107,7 @@ while game:
         duck.draw(window)
         for obj in objects:
             obj.draw(window)
-            if obj.type == "prop" or obj.type == "moved":
+            if obj.type == "prop" or obj.type == "moved" or obj.type == "slime":
                 obj.update()
         duck.update(keys, objects)
 

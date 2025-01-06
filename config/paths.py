@@ -50,8 +50,7 @@ DUCK_DEAD_PATH = ASSETS_DIR / "Duck" / "Dead" / "Dead 001.png"
 SLIME_WALKING_PATH = (
     ASSETS_DIR / "Slime" / "Walking" / "walking 001.png",
     ASSETS_DIR / "Slime" / "Walking" / "walking 002.png",
-    ASSETS_DIR / "Slime" / "Walking" / "walking 003.png",
-    ASSETS_DIR / "Slime" / "Walking" / "walking 004.png"
+    ASSETS_DIR / "Slime" / "Walking" / "walking 003.png"
 )
 
 SLIME_DEATH_PATH = (
