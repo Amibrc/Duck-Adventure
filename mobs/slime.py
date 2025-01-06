@@ -4,12 +4,11 @@ from tools import create_frames
 
 class Slime():
     def __init__(self, centerx, bottom, speed, ground_left, ground_right):
-        self.centerx = centerx
-        self.bottom = bottom
         self.ground_left = ground_left
         self.ground_right = ground_right
         self.speed = speed
         self.alive = True
+        self.death_animation_ended = False
         self.type = "slime"
 
         self.states  = {
@@ -35,7 +34,7 @@ class Slime():
         self.last_animation_death_time = 0
 
         self.animation_walking_interval = 200
-        self.animation_death_interval = 300
+        self.animation_death_interval = 2000
 
         self.object_rect = self.animation_frames["walking"]["right"][0].get_rect(centerx=centerx, bottom=bottom)
 
@@ -46,8 +45,9 @@ class Slime():
 
     def update(self):
         if self.alive:
-            self.update_walking_animation()
-            self.move()
+            #self.update_walking_animation()
+            self.update_death_animation()
+            #self.move()
         else:
             self.update_death_animation()
     
@@ -65,11 +65,14 @@ class Slime():
     def update_death_animation(self):
         frames = self.animation_frames["death"][self.get_direction()]
 
-        if pygame.time.get_ticks() - self.last_animation_death_time >= self.animation_death_interval:
-            self.current_frames["death"] = (self.current_frames["death"] + 1) % len(frames)
-            self.object_rect = frames[self.current_frames["death"]].get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
-            self.current_frame_slime = frames[self.current_frames["death"]]
-            self.last_animation_death_time = pygame.time.get_ticks()
+        if self.current_frames["death"] < len(frames) - 1:
+            if pygame.time.get_ticks() - self.last_animation_death_time >= self.animation_death_interval:
+                self.current_frames["death"] = self.current_frames["death"] + 1
+                self.object_rect = frames[self.current_frames["death"]].get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
+                self.current_frame_slime = frames[self.current_frames["death"]]
+                self.last_animation_death_time = pygame.time.get_ticks()
+        else:
+            self.death_animation_ended = True
 
 
     def move(self):

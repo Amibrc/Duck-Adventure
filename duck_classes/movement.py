@@ -144,7 +144,6 @@ class MovementDuck():
         if collision_data["object"].type == "prop":
             if collision_data["collision_x"] and collision_data["collision_y"]:
                 collision_data["object"].is_collected = True
-                self.objects.remove(collision_data["object"])
 
         elif collision_data["object"].type == "moved":
             if collision_data["on_object"]:
