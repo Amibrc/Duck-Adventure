@@ -1,5 +1,4 @@
 import pygame
-from tools import load_images
 
 class StaticObject():
     def __init__(self, x, bottom, image):
