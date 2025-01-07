@@ -9,7 +9,7 @@ class Slime():
         self.speed = speed
         self.alive = True
         self.death_animation_ended = False
-        self.type = "slime"
+        self.type = "mob"
 
         self.states  = {
             "direction_right": speed > 0,
@@ -29,14 +29,15 @@ class Slime():
         }
 
         self.current_frame_slime = self.animation_frames["walking"]["right"][0]
+        self.object_rect = self.current_frame_slime.get_rect(centerx=centerx, bottom=bottom)
 
         self.last_animation_walking_time = 0
         self.last_animation_death_time = 0
 
         self.animation_walking_interval = 200
-        self.animation_death_interval = 2000
+        self.animation_death_interval = 100
 
-        self.object_rect = self.animation_frames["walking"]["right"][0].get_rect(centerx=centerx, bottom=bottom)
+        
 
 
     def draw(self, surface):
@@ -45,9 +46,8 @@ class Slime():
 
     def update(self):
         if self.alive:
-            #self.update_walking_animation()
-            self.update_death_animation()
-            #self.move()
+            self.update_walking_animation()
+            self.move()
         else:
             self.update_death_animation()
     
@@ -67,26 +67,27 @@ class Slime():
 
         if self.current_frames["death"] < len(frames) - 1:
             if pygame.time.get_ticks() - self.last_animation_death_time >= self.animation_death_interval:
-                self.current_frames["death"] = self.current_frames["death"] + 1
                 self.object_rect = frames[self.current_frames["death"]].get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
                 self.current_frame_slime = frames[self.current_frames["death"]]
+                self.current_frames["death"] += 1
                 self.last_animation_death_time = pygame.time.get_ticks()
         else:
             self.death_animation_ended = True
 
 
     def move(self):
-        self.object_rect.x += self.speed
-        if self.object_rect.right > self.ground_right:
+        if self.object_rect.right + self.speed > self.ground_right:
             self.object_rect.right = self.ground_right
             self.speed = -self.speed
             self.states["direction_right"] = not self.states["direction_right"]
             self.states["direction_left"] = not self.states["direction_left"]
-        elif self.object_rect.left < self.ground_left:
+        elif self.object_rect.left + self.speed < self.ground_left:
             self.object_rect.left = self.ground_left
             self.speed = -self.speed
             self.states["direction_right"] = not self.states["direction_right"]
             self.states["direction_left"] = not self.states["direction_left"]
+        else:
+            self.object_rect.x += self.speed
     
 
     def get_direction(self):
