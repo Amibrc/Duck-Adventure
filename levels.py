@@ -10,10 +10,10 @@ from config.images import (
 )
 
 class Level():
-    def __init__(self, objects, enemies, coins, diamonds):
-        self.all_objects = objects + enemies + coins + diamonds
+    def __init__(self, objects, mobs, coins, diamonds):
+        self.all_objects = objects + mobs + coins + diamonds
         self.objects = objects
-        self.enemies = enemies
+        self.mobs = mobs
         self.coins = coins
         self.diamonds = diamonds
         
@@ -22,8 +22,8 @@ class Level():
         for obj in self.objects:
             obj.draw(surface)
 
-        for enemy in self.enemies:
-            enemy.draw(surface)
+        for mob in self.mobs:
+            mob.draw(surface)
 
         for coin in self.coins:
             coin.draw(surface)
@@ -37,11 +37,11 @@ class Level():
             if obj.type == 'moved':
                 obj.update()
 
-        for enemy in self.enemies:
-            enemy.update()
-            if enemy.death_animation_ended:
-                self.enemies.remove(enemy)
-                self.all_objects.remove(enemy)
+        for mob in self.mobs:
+            mob.update()
+            if mob.death_animation_ended:
+                self.mobs.remove(mob)
+                self.all_objects.remove(mob)
 
         for coin in self.coins:
             coin.update()
@@ -73,7 +73,7 @@ level_test = Level(
         MovedObject(600, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 596, SCREEN_WIDTH - 32, 0, 0),
         MovedObject(632, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 628, SCREEN_WIDTH, 0, 0)
     ],
-    enemies=[
+    mobs=[
         Slime(200, SCREEN_HEIGHT - 72, 1, 150, 278)
     ],
     coins=[

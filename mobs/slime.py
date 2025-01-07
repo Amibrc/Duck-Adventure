@@ -7,7 +7,6 @@ class Slime():
         self.ground_left = ground_left
         self.ground_right = ground_right
         self.speed = speed
-        self.alive = True
         self.death_animation_ended = False
         self.type = "mob"
 
@@ -15,7 +14,8 @@ class Slime():
             "direction_right": speed > 0,
             "direction_left": speed < 0,
             "is_walking": True,
-            "is_death": False
+            "is_death": False,
+            "is_dead": False
         }
 
         self.animation_frames = {
@@ -37,15 +37,13 @@ class Slime():
         self.animation_walking_interval = 200
         self.animation_death_interval = 100
 
-        
-
 
     def draw(self, surface):
         surface.blit(self.current_frame_slime, self.object_rect)
 
 
     def update(self):
-        if self.alive:
+        if not self.states["is_dead"]:
             self.update_walking_animation()
             self.move()
         else:

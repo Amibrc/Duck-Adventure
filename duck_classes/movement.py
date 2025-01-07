@@ -182,8 +182,12 @@ class MovementDuck():
             if collision_data["on_object"]:
                 self.duck_rect.bottom = collision_data["obj_rect"].top
                 self.start_jump()
-                collision_data["object"].alive = False
-            elif collision_data["collision_sides"]["right"] or collision_data["collision_sides"]["left"]:
+                collision_data["object"].states["is_dead"] = True
+            elif collision_data["collision_sides"]["right"]:
+                self.duck_rect.right = collision_data["obj_rect"].left
+                self.states["is_dead"] = True
+            elif collision_data["collision_sides"]["left"]:
+                self.duck_rect.left = collision_data["obj_rect"].right
                 self.states["is_dead"] = True
 
 
