@@ -41,16 +41,19 @@ class Level():
             enemy.update()
             if enemy.death_animation_ended:
                 self.enemies.remove(enemy)
+                self.all_objects.remove(enemy)
 
         for coin in self.coins:
             coin.update()
             if coin.is_collected:
                 self.coins.remove(coin)
+                self.all_objects.remove(coin)
             
         for diamond in self.diamonds:
             diamond.update()
             if diamond.is_collected:
                 self.diamonds.remove(diamond)
+                self.all_objects.remove(diamond)
 
 SCREEN_WIDTH, SCREEN_HEIGHT = get_display_settings(True, True, False)
 
@@ -58,7 +61,7 @@ level_test = Level(
     objects=[
         StaticObject(0, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
         StaticObject(0, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE),
-        StaticObject(182, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE),
+        #StaticObject(182, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE),
         StaticObject(420, SCREEN_HEIGHT - 250, GREY_BRICK_IMAGE), StaticObject(452, SCREEN_HEIGHT - 250, GREY_BRICK_IMAGE),
         StaticObject(150, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(182, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(246, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE),
         StaticObject(500, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(500, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE),
