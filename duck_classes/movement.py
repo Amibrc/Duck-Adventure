@@ -25,15 +25,16 @@ class MovementDuck():
 
 
     def move(self, keys, objects):
-        if keys[pygame.K_d] and self.duck_rect.right < self.ground_right:
-            self.move_right(objects)
-        elif self.duck_rect.right > self.ground_right:
-            self.duck_rect.right = self.ground_right
+        if not self.states["is_dead"]:
+            if keys[pygame.K_d] and self.duck_rect.right < self.ground_right:
+                self.move_right(objects)
+            elif self.duck_rect.right > self.ground_right:
+                self.duck_rect.right = self.ground_right
 
-        if keys[pygame.K_a] and self.duck_rect.left > 0:
-            self.move_left(objects)
-        elif self.duck_rect.left < 0:
-            self.duck_rect.left = 0
+            if keys[pygame.K_a] and self.duck_rect.left > 0:
+                self.move_left(objects)
+            elif self.duck_rect.left < 0:
+                self.duck_rect.left = 0
 
     
     def move_right(self, objects):
@@ -77,19 +78,20 @@ class MovementDuck():
 
 
     def start_jump(self):
-        if self.duck_rect.bottom >= self.ground_bottom - 5:
-            if self.states["is_crouching"]:
-                self.vector_speed_vertical = -self.jump_force // 1.5
-            else:
-                self.vector_speed_vertical = -self.jump_force
-            self.states["is_jumping"] = True
+        if not self.states["is_dead"]:
+            if self.duck_rect.bottom >= self.ground_bottom - 5:
+                if self.states["is_crouching"]:
+                    self.vector_speed_vertical = -self.jump_force // 1.5
+                else:
+                    self.vector_speed_vertical = -self.jump_force
+                self.states["is_jumping"] = True
 
-        elif self.duck_rect.bottom < self.ground_bottom - 5 and not self.states["is_jumping"]:
-            if self.states["is_crouching"]:
-                self.vector_speed_vertical = -self.jump_force // 1.5
-            else:
-                self.vector_speed_vertical = -self.jump_force
-            self.states["is_jumping"] = True
+            elif self.duck_rect.bottom < self.ground_bottom - 5 and not self.states["is_jumping"]:
+                if self.states["is_crouching"]:
+                    self.vector_speed_vertical = -self.jump_force // 1.5
+                else:
+                    self.vector_speed_vertical = -self.jump_force
+                self.states["is_jumping"] = True
 
 
     def jumping(self, objects):
@@ -134,6 +136,9 @@ class MovementDuck():
         for collision_data in self.collision_info:
             self.update_collision_sides_with_moved_objects(collision_data)
             self.update_collision_sides_with_static_objects(collision_data)
+
+            self.update_collision_with_mobs(collision_data)
+
             self.update_collision_with_moved_objects(collision_data)
             self.update_collision_with_static_objects(collision_data)
 
@@ -170,6 +175,16 @@ class MovementDuck():
                 self.vector_speed_vertical = 0
                 self.states["is_jumping"] = False
                 self.on_platform = True
+
+
+    def update_collision_with_mobs(self, collision_data):
+        if collision_data["object"].type == "mob":
+            if collision_data["on_object"]:
+                self.duck_rect.bottom = collision_data["obj_rect"].top
+                self.start_jump()
+                collision_data["object"].alive = False
+            elif collision_data["collision_sides"]["right"] or collision_data["collision_sides"]["left"]:
+                self.states["is_dead"] = True
 
 
     def update_collision_sides_with_static_objects(self, collision_data):

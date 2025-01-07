@@ -57,12 +57,11 @@ class Duck():
 
 
     def update_states(self, keys, objects):
-        self.states["is_middle_idle"] = keys[pygame.K_d] and keys[pygame.K_a]
-        self.states["is_walking"] = not self.states["is_middle_idle"] and not keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a])
-        self.states["is_running"] = not self.states["is_middle_idle"] and keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]) and not keys[pygame.K_LCTRL]
-        self.states["is_crouching"] = keys[pygame.K_LCTRL]
-        self.states["is_rude"] = keys[pygame.K_f]
-        self.states["is_dead"] = keys[pygame.K_t]
+        self.states["is_middle_idle"] = keys[pygame.K_d] and keys[pygame.K_a] and not self.states["is_dead"]
+        self.states["is_walking"] = not self.states["is_middle_idle"] and not keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]) and not self.states["is_dead"]
+        self.states["is_running"] = not self.states["is_middle_idle"] and keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]) and not keys[pygame.K_LCTRL] and not self.states["is_dead"]
+        self.states["is_crouching"] = keys[pygame.K_LCTRL] and not self.states["is_dead"]
+        self.states["is_rude"] = keys[pygame.K_f] and not self.states["is_dead"]
         self.states["is_idle"] = not (self.states["is_walking"] or self.states["is_running"] or self.states["is_crouching"] or self.states["is_jumping"] or self.states["is_middle_idle"] or self.states["is_rude"] or self.states["is_dead"] or self.states["is_dead"])
 
         self.update_duck_rect()

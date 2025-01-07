@@ -56,6 +56,10 @@ class AnimatorDuck():
             self.reset_animation_frames("idle")
             return self.idle_animation(current_frame_duck)
         
+        elif self.states["is_dead"]:
+            self.reset_animation_frames()
+            return self.dead_animation()
+        
         elif self.states["is_crouching"]:
             if self.states["is_jumping"]:
                 self.reset_animation_frames()
@@ -89,10 +93,6 @@ class AnimatorDuck():
         elif self.states["is_rude"]:
             self.reset_animation_frames()
             return self.rude_animation()
-        
-        elif self.states["is_dead"]:
-            self.reset_animation_frames()
-            return self.dead_animation()
         
         return current_frame_duck
 
