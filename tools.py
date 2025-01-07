@@ -52,6 +52,29 @@ def collision_with_objects(character_rect, objects):
                     "collision_y": collision_y
                 }
                 collision_objects.append(collision_data)
+
+        elif obj.type == "mob":
+            collision_x = character_rect.right >= obj_rect.left and character_rect.left <= obj_rect.right
+            collision_y = character_rect.bottom >= obj_rect.top and character_rect.top <= obj_rect.bottom
+            on_object = collision_x and character_rect.bottom == obj_rect.top
+
+            if collision_x and collision_y or on_object:
+                collision_data = {
+                    "object": obj,
+                    "obj_rect": obj_rect,
+                    "on_object": on_object,
+                    "collision_x": collision_x,
+                    "collision_y": collision_y,
+                    "collision_sides": {
+                        "right": collision_y and character_rect.right >= obj_rect.left and character_rect.right <= obj_rect.right,
+                        "left": collision_y and character_rect.left <= obj_rect.right and character_rect.left >= obj_rect.left,
+                        "top": obj_rect.top < character_rect.top < obj_rect.bottom and character_rect.bottom > obj_rect.bottom,
+                        "bottom": character_rect.bottom > obj_rect.top and character_rect.bottom < obj_rect.bottom
+                    }
+                }
+
+                collision_objects.append(collision_data)
+
         else:
             collision_x = character_rect.right > obj_rect.left and character_rect.left < obj_rect.right
             collision_y = character_rect.bottom > obj_rect.top and character_rect.top < obj_rect.bottom
