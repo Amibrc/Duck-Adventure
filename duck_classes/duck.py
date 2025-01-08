@@ -66,6 +66,16 @@ class Duck():
 
         self.update_duck_rect()
         self.Movement.update_collisions_and_gravity(objects)
+    
+
+    def set_objects(self, objects):
+        self.Movement.objects = objects
+
+    
+    def set_position(self, centerx, bottom):
+        self.duck_rect.centerx = centerx
+        self.duck_rect.bottom = bottom
+        self.update_duck_rect()
 
 
     def draw(self, surface):
