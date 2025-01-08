@@ -19,17 +19,8 @@ class Level():
         
     
     def draw(self, surface):
-        for obj in self.objects:
+        for obj in self.all_objects:
             obj.draw(surface)
-
-        for mob in self.mobs:
-            mob.draw(surface)
-
-        for coin in self.coins:
-            coin.draw(surface)
-        
-        for diamond in self.diamonds:
-            diamond.draw(surface)
     
 
     def update(self):
@@ -55,13 +46,62 @@ class Level():
                 self.diamonds.remove(diamond)
                 self.all_objects.remove(diamond)
 
+
+class LevelManager():
+    def __init__(self, levels):
+        self.levels = levels
+        self.current_level_index = 0
+        self.current_level = self.levels[self.current_level_index]
+        self.all_level_objects = self.current_level.all_objects
+    
+
+    def draw(self, surface):
+        self.current_level.draw(surface)
+
+
+    def update(self):
+        self.current_level.update()
+
+    
+    def next_level(self):
+        if self.current_level_index < len(self.levels) - 1:
+            self.current_level_index += 1
+            self.current_level = self.levels[self.current_level_index]
+            self.all_level_objects = self.current_level.all_objects
+    
+    
+    def check_diamond(self):
+        if not self.current_level.diamonds:
+            self.next_level()
+            return True
+        return False
+    
+
+    def check_mobs(self):
+        if not self.current_level.mobs:
+            self.next_level()
+            return True
+        return False
+
+
+    def check_coins(self):
+        if not self.current_level.coins:
+            self.next_level()
+            return True
+        return False
+    
+
+    
+
+
+
 SCREEN_WIDTH, SCREEN_HEIGHT = get_display_settings(True, True, False)
 
 level_test = Level(
     objects=[
         StaticObject(0, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
         StaticObject(0, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE),
-        #StaticObject(182, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE),
+        StaticObject(182, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 170, GREY_BRICK_IMAGE),
         StaticObject(420, SCREEN_HEIGHT - 250, GREY_BRICK_IMAGE), StaticObject(452, SCREEN_HEIGHT - 250, GREY_BRICK_IMAGE),
         StaticObject(150, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(182, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(214, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE), StaticObject(246, SCREEN_HEIGHT - 40, RED_BRICK_IMAGE),
         StaticObject(500, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(500, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE),
@@ -90,7 +130,21 @@ level_test = Level(
 )
 
 level_1 = Level(
-    0, 0, 0, 0
+    objects=[
+        StaticObject(0, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
+        StaticObject(0, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE)
+    ],
+    mobs=[
+        Slime(200, SCREEN_HEIGHT, 1, 150, 278)
+    ],
+    coins=[
+
+    ],
+    diamonds=[
+        Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 372)
+    ]
 )
 
-        
+
+
+level_manager = LevelManager((level_test, level_1))
