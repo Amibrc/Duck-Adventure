@@ -1,6 +1,9 @@
 import pygame
-from config.images import SLIME_WALKING_IMAGES, SLIME_DEATH_IMAGES
 from tools import create_frames
+from config.images import (
+    SLIME_WALKING_IMAGES,
+    SLIME_DEATH_IMAGES
+)
 
 class Slime():
     def __init__(self, centerx, bottom, speed, ground_left, ground_right):

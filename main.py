@@ -4,8 +4,9 @@ from duck_classes.duck import Duck
 from tools import get_display_settings
 from config.paths import FONT_PATH
 from config.images import GAME_ICON_IMAGE
-from levels import level_test
+from levels import level_manager
 from menu import GameMenu
+from camera import Camera
 
 pygame.font.init()
 
@@ -19,7 +20,8 @@ window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Duck Adventure")
 pygame.display.set_icon(GAME_ICON_IMAGE)
 
-duck = Duck(SCREEN_WIDTH // 2, SCREEN_HEIGHT, level_test.all_objects)
+duck = Duck(SCREEN_WIDTH // 2, SCREEN_HEIGHT, level_manager.all_level_objects)
+camera = Camera(SCREEN_WIDTH)
 
 stage_game = "game_menu"
 game = True
@@ -38,9 +40,17 @@ while game:
     if stage_game == "playing":
         background.draw(window)
         duck.draw(window)
-        level_test.draw(window)
-        level_test.update()
-        duck.update(keys, level_test.all_objects)
+        level_manager.draw(window)
+        
+
+        if level_manager.check_mobs() or level_manager.check_diamond():
+            duck.set_objects(level_manager.all_level_objects)
+            duck.set_position(10, SCREEN_HEIGHT)
+
+        duck.update(keys, level_manager.all_level_objects)
+        camera.update(duck.duck_rect.x, SCREEN_WIDTH + 1000)
+        level_manager.update()
+        background.update(camera)
 
     elif stage_game == "game_menu":
         game_menu.draw(window)
