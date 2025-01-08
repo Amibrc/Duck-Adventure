@@ -10,12 +10,14 @@ from config.images import (
 )
 
 class Level():
-    def __init__(self, objects, mobs, coins, diamonds):
+    def __init__(self, objects, mobs, coins, diamonds, level_width, level_height):
         self.all_objects = objects + mobs + coins + diamonds
         self.objects = objects
         self.mobs = mobs
         self.coins = coins
         self.diamonds = diamonds
+        self.level_width = level_width
+        self.level_height = level_height
         
     
     def draw(self, surface):
@@ -55,8 +57,14 @@ class LevelManager():
         self.all_level_objects = self.current_level.all_objects
     
 
-    def draw(self, surface):
-        self.current_level.draw(surface)
+    def draw(self, surface, camera):
+        for obj in self.all_level_objects:
+            if obj.type == "static" or obj.type == "moved":
+                surface.blit(obj.object_image, camera.apply(obj.object_rect))
+            elif obj.type == "prop":
+                surface.blit(obj.current_animation, camera.apply(obj.object_rect))
+            else:
+                surface.blit(obj.current_frame_slime, camera.apply(obj.object_rect))
 
 
     def update(self):
@@ -91,10 +99,6 @@ class LevelManager():
         return False
     
 
-    
-
-
-
 SCREEN_WIDTH, SCREEN_HEIGHT = get_display_settings(True, True, False)
 
 level_test = Level(
@@ -126,7 +130,9 @@ level_test = Level(
     ],
     diamonds=[
         Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 372)
-    ]
+    ],
+    level_width=2000,
+    level_height=600
 )
 
 level_1 = Level(
@@ -141,8 +147,10 @@ level_1 = Level(
 
     ],
     diamonds=[
-        Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 372)
-    ]
+        Diamond(768, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
+    ],
+    level_width=2000,
+    level_height=600
 )
 
 
