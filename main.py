@@ -21,7 +21,7 @@ pygame.display.set_caption("Duck Adventure")
 pygame.display.set_icon(GAME_ICON_IMAGE)
 
 duck = Duck(SCREEN_WIDTH // 2, SCREEN_HEIGHT, level_manager.all_level_objects)
-camera = Camera(SCREEN_WIDTH)
+camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 stage_game = "game_menu"
 game = True
@@ -39,8 +39,8 @@ while game:
     
     if stage_game == "playing":
         background.draw(window)
-        duck.draw(window)
-        level_manager.draw(window)
+        duck.draw(window, camera)
+        level_manager.draw(window, camera)
         
 
         if level_manager.check_mobs() or level_manager.check_diamond():
@@ -48,7 +48,8 @@ while game:
             duck.set_position(10, SCREEN_HEIGHT)
 
         duck.update(keys, level_manager.all_level_objects)
-        camera.update(duck.duck_rect.x, SCREEN_WIDTH + 1000)
+        camera.update(duck.duck_rect, level_manager.current_level.level_width, level_manager.current_level.level_height)
+        duck.Movement.ground_right = level_manager.current_level.level_width
         level_manager.update()
         background.update(camera)
 

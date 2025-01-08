@@ -78,5 +78,5 @@ class Duck():
         self.update_duck_rect()
 
 
-    def draw(self, surface):
-        surface.blit(self.current_frame_duck, self.duck_rect)
+    def draw(self, surface, camera):
+        surface.blit(self.current_frame_duck, camera.apply(self.duck_rect))
