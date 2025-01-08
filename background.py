@@ -13,7 +13,7 @@ class Background():
         self.layers_static = tuple(scale_image_to_screen(image, width, height) for image in BACKGROUND_STATIC_IMAGES)
         self.layers_scroll = tuple(scale_image_to_screen(image, width, height) for image in BACKGROUND_SCROLL_IMAGES)
         self.layers = self.layers_static + self.layers_scroll
-        self.scroll_speeds = (0.025, 0.05, 0.1)
+        self.scroll_speeds = (0.05, 0.1, 0.2)
 
         for layer in self.layers:
             self.background.blit(layer, (0, 0))
