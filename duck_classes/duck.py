@@ -27,7 +27,6 @@ class Duck():
 
         
     def update(self, keys, objects):
-        #print(self.states["direction_right"], self.states["direction_left"], self.states["is_jumping"])
         self.update_animation() # 1. update_animation
         self.Movement.move(keys, objects) # 2. move
         self.Movement.jumping(objects) # 3. jumping
