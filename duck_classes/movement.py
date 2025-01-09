@@ -179,9 +179,12 @@ class MovementDuck():
 
     def update_collision_with_mobs(self, collision_data):
         if collision_data["object"].type == "mob":
-            if collision_data["on_object"]:
+            if collision_data["on_object"] and not self.states["is_dead"]:
                 self.duck_rect.bottom = collision_data["obj_rect"].top
+                collision_data["object"].states["is_dead"] = True
                 self.start_jump()
+            elif collision_data["collision_sides"]["top"] and not self.states["is_dead"]:
+                self.duck_rect.top = collision_data["obj_rect"].bottom
                 collision_data["object"].states["is_dead"] = True
             elif collision_data["collision_sides"]["right"]:
                 self.duck_rect.right = collision_data["obj_rect"].left
@@ -189,6 +192,7 @@ class MovementDuck():
             elif collision_data["collision_sides"]["left"]:
                 self.duck_rect.left = collision_data["obj_rect"].right
                 self.states["is_dead"] = True
+
 
 
     def update_collision_sides_with_static_objects(self, collision_data):
