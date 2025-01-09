@@ -20,9 +20,14 @@ class Level():
         self.level_height = level_height
         
     
-    def draw(self, surface):
+    def draw(self, surface, camera):
         for obj in self.all_objects:
-            obj.draw(surface)
+            if obj.type == "static" or obj.type == "moved":
+                surface.blit(obj.object_image, camera.apply(obj.object_rect))
+            elif obj.type == "prop":
+                surface.blit(obj.current_animation, camera.apply(obj.object_rect))
+            else:
+                surface.blit(obj.current_frame_slime, camera.apply(obj.object_rect))
     
 
     def update(self):
@@ -58,13 +63,7 @@ class LevelManager():
     
 
     def draw(self, surface, camera):
-        for obj in self.all_level_objects:
-            if obj.type == "static" or obj.type == "moved":
-                surface.blit(obj.object_image, camera.apply(obj.object_rect))
-            elif obj.type == "prop":
-                surface.blit(obj.current_animation, camera.apply(obj.object_rect))
-            else:
-                surface.blit(obj.current_frame_slime, camera.apply(obj.object_rect))
+        self.current_level.draw(surface, camera)
 
 
     def update(self):
@@ -112,8 +111,8 @@ level_test = Level(
         StaticObject(532, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(532, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE), StaticObject(532, SCREEN_HEIGHT - 64, RED_BRICK_IMAGE),
         StaticObject(564, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 64, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 96, RED_BRICK_IMAGE),
         StaticObject(768, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(736, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(704, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(672, SCREEN_HEIGHT - 300, STONE_IMAGE),
-        MovedObject(300, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 200),
-        MovedObject(332, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 200),
+        MovedObject(300, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 600),
+        MovedObject(332, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 600),
         MovedObject(600, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 596, SCREEN_WIDTH - 32, 0, 0),
         MovedObject(632, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 628, SCREEN_WIDTH, 0, 0)
     ],
@@ -137,17 +136,25 @@ level_test = Level(
 
 level_1 = Level(
     objects=[
-        StaticObject(0, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
-        StaticObject(0, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 220, GREY_BRICK_IMAGE)
+        StaticObject(250, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(282, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
+        StaticObject(314, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE), StaticObject(346, SCREEN_HEIGHT - 70, RED_BRICK_IMAGE),
+
     ],
     mobs=[
-        Slime(200, SCREEN_HEIGHT, 1, 150, 278)
+        Slime(728, SCREEN_HEIGHT, -1, 500, 696 +32 +32)
     ],
     coins=[
+        Coin(266, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(314, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(362, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+
+        Coin(266, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 32),
+        Coin(314, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 32),
+        Coin(362, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 32),
 
     ],
     diamonds=[
-        Diamond(768, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
+        Diamond(2000, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
     ],
     level_width=2000,
     level_height=600
@@ -155,4 +162,4 @@ level_1 = Level(
 
 
 
-level_manager = LevelManager((level_test, level_1))
+level_manager = LevelManager((level_1, level_test))
