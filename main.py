@@ -26,8 +26,6 @@ camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 stage_game = "game_menu"
 game = True
 while game:
-    keys = pygame.key.get_pressed()
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game = False
@@ -38,6 +36,8 @@ while game:
                 duck.Movement.start_jump()
     
     if stage_game == "playing":
+        keys = pygame.key.get_pressed()
+
         background.draw(window)
         duck.draw(window, camera)
         level_manager.draw(window, camera)
