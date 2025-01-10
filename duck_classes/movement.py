@@ -1,5 +1,8 @@
 import pygame
-from tools import get_display_settings, collision_with_objects
+from tools import (
+    get_display_settings,
+    collision_with_objects
+)
 
 
 class MovementDuck():
@@ -23,6 +26,8 @@ class MovementDuck():
         self.moved_x = False
         self.moved_y = False
 
+        self.target_rect = duck_rect.copy()
+
 
     def move(self, keys, objects):
         if not self.states["is_dead"]:
@@ -30,11 +35,14 @@ class MovementDuck():
                 self.move_right(objects)
             elif self.duck_rect.right > self.ground_right:
                 self.duck_rect.right = self.ground_right
+                self.target_rect.right = self.ground_right
+
 
             if keys[pygame.K_a] and self.duck_rect.left > 0:
                 self.move_left(objects)
             elif self.duck_rect.left < 0:
                 self.duck_rect.left = 0
+                self.target_rect.left = 0
 
     
     def move_right(self, objects):
@@ -51,6 +59,7 @@ class MovementDuck():
                         return
                 
             self.duck_rect.right += 1
+            self.target_rect.right += 1
             remaining_distance -= 1
         
         self.states["direction_right"] = True
@@ -71,6 +80,7 @@ class MovementDuck():
                         return
             
             self.duck_rect.left -= 1
+            self.target_rect.left -= 1
             remaining_distance -= 1
 
         self.states["direction_left"] = True
@@ -109,12 +119,14 @@ class MovementDuck():
                     if collision_data["object"].type != "prop":
                         if collision_data["on_object"] and self.vector_speed_vertical > 0:
                             self.duck_rect.bottom = collision_data["obj_rect"].top
+                            self.target_rect.bottom = collision_data["obj_rect"].top
                             self.vector_speed_vertical = 0
                             self.states["is_jumping"] = False
                             self.on_platform = True
                             return
                         elif collision_data["collision_sides"]["top"] and self.vector_speed_vertical < 0:
                             self.duck_rect.top = collision_data["obj_rect"].bottom
+                            self.target_rect.top = collision_data["obj_rect"].bottom
                             self.vector_speed_vertical = 0
                             return
                         self.update_collision_sides_with_static_objects(collision_data)
@@ -123,6 +135,7 @@ class MovementDuck():
 
             if self.duck_rect.bottom + self.vector_speed_vertical >= self.ground_bottom:
                 self.duck_rect.bottom = self.ground_bottom
+                self.target_rect.bottom = self.ground_bottom
                 self.vector_speed_vertical = 0
                 self.states["is_jumping"] = False
 
@@ -162,6 +175,7 @@ class MovementDuck():
                     self.move_horizontally_on_platform(collision_data["object"].speed_x)
                 if collision_data["object"].speed_y:
                     self.duck_rect.bottom = collision_data["obj_rect"].top
+                    self.target_rect.bottom = collision_data["obj_rect"].top
                     self.move_vertically_on_platform(collision_data["object"].speed_y)
                     self.vector_speed_vertical = 0
                     self.states["is_jumping"] = False
@@ -172,6 +186,7 @@ class MovementDuck():
         if collision_data["object"].type == "static":
             if collision_data["on_object"]:
                 self.duck_rect.bottom = collision_data["obj_rect"].top
+                self.target_rect.bottom = collision_data["obj_rect"].top
                 self.vector_speed_vertical = 0
                 self.states["is_jumping"] = False
                 self.on_platform = True
@@ -181,16 +196,20 @@ class MovementDuck():
         if collision_data["object"].type == "mob":
             if collision_data["on_object"] and not self.states["is_dead"]:
                 self.duck_rect.bottom = collision_data["obj_rect"].top
+                self.target_rect.bottom = collision_data["obj_rect"].top
                 collision_data["object"].states["is_dead"] = True
                 self.start_jump()
             elif collision_data["collision_sides"]["top"] and not self.states["is_dead"]:
                 self.duck_rect.top = collision_data["obj_rect"].bottom
+                self.target_rect.top = collision_data["obj_rect"].bottom
                 collision_data["object"].states["is_dead"] = True
             elif collision_data["collision_sides"]["right"]:
                 self.duck_rect.right = collision_data["obj_rect"].left
+                self.target_rect.right = collision_data["obj_rect"].left
                 self.states["is_dead"] = True
             elif collision_data["collision_sides"]["left"]:
                 self.duck_rect.left = collision_data["obj_rect"].right
+                self.target_rect.left = collision_data["obj_rect"].right
                 self.states["is_dead"] = True
 
 
@@ -199,22 +218,28 @@ class MovementDuck():
         if collision_data["object"].type == "static":
             if collision_data["collision_sides"]["right"]:
                 self.duck_rect.right = collision_data["obj_rect"].left
+                self.target_rect.right = collision_data["obj_rect"].left
             elif collision_data["collision_sides"]["left"]:
                 self.duck_rect.left = collision_data["obj_rect"].right
-    
+                self.target_rect.left = collision_data["obj_rect"].right
+
 
     def update_collision_sides_with_moved_objects(self, collision_data):
         if collision_data["object"].type == "moved":
             if collision_data["object"].speed_x:
                 if collision_data["collision_sides"]["right"]:
                     self.duck_rect.right = collision_data["obj_rect"].left
+                    self.target_rect.right = collision_data["obj_rect"].left
                 elif collision_data["collision_sides"]["left"]:
                     self.duck_rect.left = collision_data["obj_rect"].right
+                    self.target_rect.left = collision_data["obj_rect"].right
             if collision_data["object"].speed_y:
                 if collision_data["collision_sides"]["right"] and self.states["is_jumping"]:
                     self.duck_rect.right = collision_data["obj_rect"].left
+                    self.target_rect.right = collision_data["obj_rect"].left
                 elif collision_data["collision_sides"]["left"] and self.states["is_jumping"]:
                     self.duck_rect.left = collision_data["obj_rect"].right
+                    self.target_rect.left = collision_data["obj_rect"].right
 
 
     def update_gravity(self):
@@ -222,9 +247,11 @@ class MovementDuck():
             self.states["is_jumping"] = True
             self.vector_speed_vertical += self.gravity
             self.duck_rect.bottom += self.vector_speed_vertical
+            self.target_rect.bottom += self.vector_speed_vertical
 
             if self.duck_rect.bottom >= self.ground_bottom:
                 self.duck_rect.bottom = self.ground_bottom
+                self.target_rect.bottom = self.ground_bottom
                 self.vector_speed_vertical = 0
                 self.states["is_jumping"] = False
                 self.on_platform = True
@@ -238,6 +265,7 @@ class MovementDuck():
             while remaining_distance:
                 if (self.duck_rect.right < self.ground_right and step > 0) or (self.duck_rect.left > 0 and step < 0):
                     self.duck_rect.x += step
+                    self.target_rect.x += step
                     remaining_distance -= 1
                     self.moved_x = True
                 else:
@@ -252,10 +280,16 @@ class MovementDuck():
             while remaining_distance:
                 if self.duck_rect.bottom < self.ground_bottom:
                     self.duck_rect.y += step
+                    self.target_rect.y += step
                     remaining_distance -= 1
                     self.moved_y = True
                 else:
                     return
+    
+
+    def set_level_size(self, level_width, level_height):
+        self.ground_right = level_width
+        self.ground_bottom = level_height
             
 
     def get_speed(self):
