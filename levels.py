@@ -18,7 +18,13 @@ class Level():
         self.diamonds = diamonds
         self.level_width = level_width
         self.level_height = level_height
-        
+
+        self.copy_objects = objects.copy()
+        self.copy_mobs = mobs.copy()
+        self.copy_coins = coins.copy()
+        self.copy_diamonds = diamonds.copy()
+        self.copy_all_objects = self.copy_objects + self.copy_mobs + self.copy_coins + self.copy_diamonds
+
     
     def draw(self, surface, camera):
         for obj in self.all_objects:
@@ -52,6 +58,20 @@ class Level():
             if diamond.is_collected:
                 self.diamonds.remove(diamond)
                 self.all_objects.remove(diamond)
+    
+
+    def restart(self):
+        self.objects = self.copy_objects.copy()
+        self.mobs = self.copy_mobs.copy()
+        self.coins = self.copy_coins.copy()
+        self.diamonds = self.copy_diamonds.copy()
+        self.all_objects = self.copy_all_objects.copy()
+
+        for coin in self.coins:
+            coin.is_collected = False
+        
+        for diamond in self.diamonds:
+            diamond.is_collected = False
 
 
 class LevelManager():
@@ -75,6 +95,11 @@ class LevelManager():
             self.current_level_index += 1
             self.current_level = self.levels[self.current_level_index]
             self.all_level_objects = self.current_level.all_objects
+    
+
+    def restart_level(self):
+        self.current_level.restart()
+        self.all_level_objects = self.current_level.all_objects
     
     
     def check_diamond(self):
