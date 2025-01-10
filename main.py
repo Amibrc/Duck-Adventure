@@ -1,7 +1,7 @@
 import pygame
 from background import Background
 from duck_classes.duck import Duck
-from tools import get_display_settings
+from tools import get_display_settings, restart_level
 from config.paths import FONT_PATH
 from config.images import GAME_ICON_IMAGE
 from levels import level_manager
@@ -34,6 +34,8 @@ while game:
                 stage_game = "game_menu"
             elif event.key == pygame.K_SPACE and stage_game == "playing":
                 duck.Movement.start_jump()
+            elif event.key == pygame.K_r and stage_game == "playing":
+                restart_level(level_manager, duck, SCREEN_HEIGHT)
     
     if stage_game == "playing":
         keys = pygame.key.get_pressed()
@@ -47,7 +49,7 @@ while game:
             duck.set_position(10, SCREEN_HEIGHT)
 
         duck.update(keys, level_manager.all_level_objects)
-        camera.update(duck.duck_rect, level_manager.current_level.level_width, level_manager.current_level.level_height)
+        camera.update(duck.Movement.target_rect, level_manager.current_level.level_width, level_manager.current_level.level_height)
         duck.Movement.ground_right = level_manager.current_level.level_width
         level_manager.update()
         background.update(camera)
