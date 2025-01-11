@@ -6,7 +6,7 @@ from tools import (
 
 
 class MovementDuck():
-    def __init__(self, duck_rect : pygame.Rect, states, objects):
+    def __init__(self, duck_rect : pygame.Rect, states, objects, level_size):
         self.duck_rect = duck_rect
         self.states = states
         self.objects = objects
@@ -19,7 +19,7 @@ class MovementDuck():
         self.vector_speed_vertical = 0
         self.gravity = 2
 
-        self.ground_right, self.ground_bottom = get_display_settings(True, True, False)
+        self.ground_right, self.ground_bottom = level_size
         self.on_platform = False
         self.under_platform = False
 
@@ -37,7 +37,6 @@ class MovementDuck():
                 self.duck_rect.right = self.ground_right
                 self.target_rect.right = self.ground_right
 
-
             if keys[pygame.K_a] and self.duck_rect.left > 0:
                 self.move_left(objects)
             elif self.duck_rect.left < 0:
@@ -54,6 +53,7 @@ class MovementDuck():
                 if collision_data["object"].type != "prop":
                     if collision_data["collision_sides"]["right"]:
                         self.duck_rect.right = collision_data["obj_rect"].left
+                        self.target_rect.right = collision_data["obj_rect"].left
                         self.states["direction_right"] = True
                         self.states["direction_left"] = False
                         return
@@ -75,6 +75,7 @@ class MovementDuck():
                 if collision_data["object"].type != "prop":
                     if collision_data["collision_sides"]["left"]:
                         self.duck_rect.left = collision_data["obj_rect"].right
+                        self.target_rect.left = collision_data["obj_rect"].right
                         self.states["direction_left"] = True
                         self.states["direction_right"] = False
                         return
@@ -149,11 +150,9 @@ class MovementDuck():
         for collision_data in self.collision_info:
             self.update_collision_sides_with_moved_objects(collision_data)
             self.update_collision_sides_with_static_objects(collision_data)
-
-            self.update_collision_with_mobs(collision_data)
-
             self.update_collision_with_moved_objects(collision_data)
             self.update_collision_with_static_objects(collision_data)
+            self.update_collision_with_mobs(collision_data)
 
         self.update_gravity()
     
@@ -234,10 +233,10 @@ class MovementDuck():
                     self.duck_rect.left = collision_data["obj_rect"].right
                     self.target_rect.left = collision_data["obj_rect"].right
             if collision_data["object"].speed_y:
-                if collision_data["collision_sides"]["right"] and self.states["is_jumping"]:
+                if collision_data["collision_sides"]["right"] and self.states["is_jumping"] and not self.on_platform:
                     self.duck_rect.right = collision_data["obj_rect"].left
                     self.target_rect.right = collision_data["obj_rect"].left
-                elif collision_data["collision_sides"]["left"] and self.states["is_jumping"]:
+                elif collision_data["collision_sides"]["left"] and self.states["is_jumping"] and not self.on_platform:
                     self.duck_rect.left = collision_data["obj_rect"].right
                     self.target_rect.left = collision_data["obj_rect"].right
 
