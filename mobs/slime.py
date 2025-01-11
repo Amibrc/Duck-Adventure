@@ -7,9 +7,9 @@ from config.images import (
 
 class Slime():
     def __init__(self, centerx, bottom, speed, ground_left, ground_right):
+        self.speed = speed
         self.ground_left = ground_left
         self.ground_right = ground_right
-        self.speed = speed
         self.death_animation_ended = False
         self.type = "mob"
 
@@ -96,6 +96,10 @@ class Slime():
             return "right"
         elif self.states["direction_left"]:
             return "left"
+    
+
+    def copy(self):
+        return Slime(self.object_rect.centerx, self.object_rect.bottom, self.speed, self.ground_left, self.ground_right)
 
         
     

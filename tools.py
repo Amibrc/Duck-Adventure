@@ -12,6 +12,7 @@ def restart_level(level_manager, duck, SCREEN_HEIGHT):
     duck.Movement.target_rect.center = duck.duck_rect.center
     duck.set_objects(level_manager.all_level_objects)
 
+
 def scale_image_to_screen(image, width, height):
     scale_max = max(width / image.get_width(), height / image.get_height())
     return pygame.transform.scale(image, (int(image.get_width() * scale_max), int(image.get_height() * scale_max)))
