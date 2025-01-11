@@ -3,7 +3,7 @@ from .animator import AnimatorDuck
 from .movement import MovementDuck
 
 class Duck():
-    def __init__(self, centerx, bottom, objects):
+    def __init__(self, centerx, bottom, objects, level_size):
         self.centerx = centerx
         self.bottom = bottom
 
@@ -23,7 +23,7 @@ class Duck():
         self.Animator = AnimatorDuck(self.states)
         self.duck_rect = self.Animator.animation_frames["idle"]["right"][0].get_rect(centerx=self.centerx, bottom=self.bottom)
         self.current_frame_duck = self.Animator.animation_frames["idle"]["right"][0]
-        self.Movement = MovementDuck(self.duck_rect, self.states, objects)
+        self.Movement = MovementDuck(self.duck_rect, self.states, objects, level_size)
 
         
     def update(self, keys, objects):
@@ -67,6 +67,14 @@ class Duck():
         self.Movement.update_collisions_and_gravity(objects)
     
 
+    def update_to_next_level(self, objects, level_size, centerx=80, bottom=None):
+        if not bottom:
+            bottom = level_size[1]
+        self.set_objects(objects)
+        self.set_position(centerx, bottom)
+        self.set_level_size(level_size)
+
+
     def set_objects(self, objects):
         self.Movement.objects = objects
 
@@ -74,8 +82,13 @@ class Duck():
     def set_position(self, centerx, bottom):
         self.duck_rect.centerx = centerx
         self.duck_rect.bottom = bottom
+        self.Movement.target_rect.center = self.duck_rect.center
         self.update_duck_rect()
+    
 
+    def set_level_size(self, level_size):
+        self.Movement.ground_right, self.Movement.ground_bottom = level_size
+    
 
     def draw(self, surface, camera):
         surface.blit(self.current_frame_duck, camera.apply(self.duck_rect))
