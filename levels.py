@@ -1,6 +1,4 @@
-from objects.base import *
-from objects.coin import Coin
-from objects.diamond import Diamond
+from objects import *
 from mobs.slime import Slime
 from tools import get_display_settings
 from config.images import (
@@ -10,19 +8,20 @@ from config.images import (
 )
 
 class Level():
-    def __init__(self, objects, mobs, coins, diamonds, level_width, level_height):
+    def __init__(self, objects, mobs, coins, diamonds, level_size, win_condition):
         self.all_objects = objects + mobs + coins + diamonds
         self.objects = objects
         self.mobs = mobs
         self.coins = coins
         self.diamonds = diamonds
-        self.level_width = level_width
-        self.level_height = level_height
+        self.level_width, self.level_height = level_size
+        self.win_condition = win_condition
 
-        self.copy_objects = objects.copy()
-        self.copy_mobs = mobs.copy()
-        self.copy_coins = coins.copy()
-        self.copy_diamonds = diamonds.copy()
+
+        self.copy_objects = [obj.copy() if obj.type == "moved" else obj for obj in objects]
+        self.copy_mobs = [mob.copy() for mob in mobs]
+        self.copy_coins = [coin.copy() for coin in coins]
+        self.copy_diamonds = [diamond.copy() for diamond in diamonds]
         self.copy_all_objects = self.copy_objects + self.copy_mobs + self.copy_coins + self.copy_diamonds
 
     
@@ -61,17 +60,15 @@ class Level():
     
 
     def restart(self):
-        self.objects = self.copy_objects.copy()
-        self.mobs = self.copy_mobs.copy()
-        self.coins = self.copy_coins.copy()
-        self.diamonds = self.copy_diamonds.copy()
-        self.all_objects = self.copy_all_objects.copy()
+        self.objects = [obj.copy() if obj.type == "moved" else obj for obj in self.copy_objects]
+        self.mobs = [mob.copy() for mob in self.copy_mobs]
+        self.coins = [coin.copy() for coin in self.copy_coins]
+        self.diamonds = [diamond.copy() for diamond in self.copy_diamonds]
+        self.all_objects = self.objects + self.mobs + self.coins + self.diamonds
+    
 
-        for coin in self.coins:
-            coin.is_collected = False
-        
-        for diamond in self.diamonds:
-            diamond.is_collected = False
+    def get_level_size(self):
+        return self.level_width, self.level_height
 
 
 class LevelManager():
@@ -101,6 +98,16 @@ class LevelManager():
         self.current_level.restart()
         self.all_level_objects = self.current_level.all_objects
     
+
+    def check_win_condition(self):
+        if self.current_level.win_condition == "diamonds":
+            return self.check_diamond()
+        elif self.current_level.win_condition == "mobs":
+            return self.check_mobs()
+        elif self.current_level.win_condition == "coins":
+            return self.check_coins()
+        return False
+
     
     def check_diamond(self):
         if not self.current_level.diamonds:
@@ -136,8 +143,8 @@ level_test = Level(
         StaticObject(532, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(532, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE), StaticObject(532, SCREEN_HEIGHT - 64, RED_BRICK_IMAGE),
         StaticObject(564, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 64, RED_BRICK_IMAGE), StaticObject(564, SCREEN_HEIGHT - 96, RED_BRICK_IMAGE),
         StaticObject(768, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(736, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(704, SCREEN_HEIGHT - 300, STONE_IMAGE), StaticObject(672, SCREEN_HEIGHT - 300, STONE_IMAGE),
-        MovedObject(300, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 600),
-        MovedObject(332, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 600),
+        MovedObject(300, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 200),
+        MovedObject(332, SCREEN_HEIGHT - 50, GREY_BRICK_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 200),
         MovedObject(600, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 596, SCREEN_WIDTH - 32, 0, 0),
         MovedObject(632, SCREEN_HEIGHT - 10, GREY_BRICK_IMAGE, 2, 0, 628, SCREEN_WIDTH, 0, 0)
     ],
@@ -155,8 +162,8 @@ level_test = Level(
     diamonds=[
         Diamond(768, SCREEN_HEIGHT - 340, 0, 1, 0, 0, SCREEN_HEIGHT - 332, SCREEN_HEIGHT - 372)
     ],
-    level_width=2000,
-    level_height=600
+    level_size=(1000, 600),
+    win_condition="mobs"
 )
 
 level_1 = Level(
@@ -166,12 +173,12 @@ level_1 = Level(
 
     ],
     mobs=[
-        Slime(728, SCREEN_HEIGHT, -1, 500, 696 +32 +32)
+        Slime(728, SCREEN_HEIGHT, -1, 500, 760)
     ],
     coins=[
-        Coin(266, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
-        Coin(314, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
-        Coin(362, SCREEN_HEIGHT - 70, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(266, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(314, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(362, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
 
         Coin(266, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 32),
         Coin(314, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 32),
@@ -179,10 +186,11 @@ level_1 = Level(
 
     ],
     diamonds=[
-        Diamond(2000, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
+        Diamond(1980, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40),
+        Diamond(200, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
     ],
-    level_width=2000,
-    level_height=600
+    level_size=(2000, 600),
+    win_condition="diamonds"
 )
 
 
