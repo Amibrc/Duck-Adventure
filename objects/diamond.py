@@ -16,3 +16,7 @@ class Diamond(MovedObject, AnimatedObject):
 
     def draw(self, surface):
         AnimatedObject.draw(self, surface)
+    
+
+    def copy(self):
+        return Diamond(self.object_rect.centerx, self.object_rect.bottom, self.speed_x, self.speed_y, self.ground_left, self.ground_right, self.ground_bottom, self.ground_top)

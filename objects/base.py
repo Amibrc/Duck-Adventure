@@ -48,6 +48,10 @@ class MovedObject(StaticObject):
                     self.object_rect.top = self.ground_top
                     self.speed_y = -self.speed_y
             self.last_move_time = pygame.time.get_ticks()
+    
+
+    def copy(self):
+        return MovedObject(self.object_rect.x, self.object_rect.bottom, self.object_image, self.speed_x, self.speed_y, self.ground_left, self.ground_right, self.ground_bottom, self.ground_top, self.move_interval)
 
 
 class AnimatedObject():
