@@ -4,4 +4,4 @@ from .diamond import Diamond
 
 __all__ = ["StaticObject", "MovedObject", "Coin", "Diamond"]
 
-print("Objects and props loaded")
+print("Objects and entity loaded")
