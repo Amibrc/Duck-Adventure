@@ -195,7 +195,9 @@ level_1 = Level(
         StaticObject(1568, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(1568, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE),
         StaticObject(1600, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(1600, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE),
         StaticObject(1632, SCREEN_HEIGHT, RED_BRICK_IMAGE), StaticObject(1632, SCREEN_HEIGHT - 32, RED_BRICK_IMAGE),
-        StaticObject(1664, SCREEN_HEIGHT, RED_BRICK_IMAGE)
+        StaticObject(1664, SCREEN_HEIGHT, RED_BRICK_IMAGE),
+
+        
 
 
     ],
