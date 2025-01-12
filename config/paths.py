@@ -48,15 +48,15 @@ DUCK_RUDE_PATH = ASSETS_DIR / "Duck" / "Rude" / "Rude 001.png"
 DUCK_DEAD_PATH = ASSETS_DIR / "Duck" / "Dead" / "Dead 001.png"
 
 SLIME_WALKING_PATH = (
-    ASSETS_DIR / "Slime" / "Walking" / "walking 001.png",
-    ASSETS_DIR / "Slime" / "Walking" / "walking 002.png",
-    ASSETS_DIR / "Slime" / "Walking" / "walking 003.png"
+    ASSETS_DIR / "Mobs" / "Slime" / "Walking" / "walking 001.png",
+    ASSETS_DIR / "Mobs" / "Slime" / "Walking" / "walking 002.png",
+    ASSETS_DIR / "Mobs" / "Slime" / "Walking" / "walking 003.png"
 )
 
 SLIME_DEATH_PATH = (
-    ASSETS_DIR / "Slime" / "Death" / "death 001.png",
-    ASSETS_DIR / "Slime" / "Death" / "death 002.png",
-    ASSETS_DIR / "Slime" / "Death" / "death 003.png"
+    ASSETS_DIR / "Mobs" / "Slime" / "Death" / "death 001.png",
+    ASSETS_DIR / "Mobs" / "Slime" / "Death" / "death 002.png",
+    ASSETS_DIR / "Mobs" / "Slime" / "Death" / "death 003.png"
 )
 
 RED_BRICK_PATH = ASSETS_DIR / "Objects" / "brick 001.png"
@@ -98,4 +98,19 @@ QUIT_BUTTON_PATHS = (
     ASSETS_DIR / "Menu" / "Quit_Button" / "quit_button 001.png",
     ASSETS_DIR / "Menu" / "Quit_Button" / "quit_button 002.png",
     ASSETS_DIR / "Menu" / "Quit_Button" / "quit_button 003.png"
+)
+
+
+ROYAL_SCARAB_WALKING_PATH = (
+    ASSETS_DIR / "Mobs" / "RoyalScarab" / "RoyalScarab 001.png",
+    ASSETS_DIR / "Mobs" / "RoyalScarab" / "RoyalScarab 002.png",
+    ASSETS_DIR / "Mobs" / "RoyalScarab" / "RoyalScarab 003.png",
+    ASSETS_DIR / "Mobs" / "RoyalScarab" / "RoyalScarab 004.png"
+)
+
+GIANT_ROYAL_SCARAB_WALKING_PATH = (
+    ASSETS_DIR / "Mobs" / "GiantRoyalScarab" / "GiantRoyalScarab 001.png",
+    ASSETS_DIR / "Mobs" / "GiantRoyalScarab" / "GiantRoyalScarab 002.png",
+    ASSETS_DIR / "Mobs" / "GiantRoyalScarab" / "GiantRoyalScarab 003.png",
+    ASSETS_DIR / "Mobs" / "GiantRoyalScarab" / "GiantRoyalScarab 004.png"
 )
