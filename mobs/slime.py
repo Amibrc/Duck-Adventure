@@ -1,25 +1,14 @@
 import pygame
+from .base import Mob
 from tools import create_frames
 from config.images import (
     SLIME_WALKING_IMAGES,
     SLIME_DEATH_IMAGES
 )
 
-class Slime():
-    def __init__(self, centerx, bottom, speed, ground_left, ground_right):
-        self.speed = speed
-        self.ground_left = ground_left
-        self.ground_right = ground_right
-        self.death_animation_ended = False
-        self.type = "mob"
-
-        self.states  = {
-            "direction_right": speed > 0,
-            "direction_left": speed < 0,
-            "is_walking": True,
-            "is_death": False,
-            "is_dead": False
-        }
+class Slime(Mob):
+    def __init__(self, x, bottom, speed, ground_left, ground_right):
+        super().__init__(speed, ground_left, ground_right)
 
         self.animation_frames = {
             "walking": create_frames(SLIME_WALKING_IMAGES),
@@ -31,8 +20,8 @@ class Slime():
             "death": 0
         }
 
-        self.current_frame_slime = self.animation_frames["walking"]["right"][0]
-        self.object_rect = self.current_frame_slime.get_rect(centerx=centerx, bottom=bottom)
+        self.current_frame_mob = self.animation_frames["walking"]["right"][0]
+        self.object_rect = self.current_frame_mob.get_rect(x=x, bottom=bottom)
 
         self.last_animation_walking_time = 0
         self.last_animation_death_time = 0
@@ -42,7 +31,7 @@ class Slime():
 
 
     def draw(self, surface):
-        surface.blit(self.current_frame_slime, self.object_rect)
+        surface.blit(self.current_frame_mob, self.object_rect)
 
 
     def update(self):
@@ -58,8 +47,8 @@ class Slime():
 
         if pygame.time.get_ticks() - self.last_animation_walking_time >= self.animation_walking_interval:
             self.current_frames["walking"] = (self.current_frames["walking"] + 1) % len(frames)
-            self.current_frame_slime = frames[self.current_frames["walking"]]
-            self.object_rect = self.current_frame_slime.get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
+            self.current_frame_mob = frames[self.current_frames["walking"]]
+            self.object_rect = self.current_frame_mob.get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
             self.last_animation_walking_time = pygame.time.get_ticks()
     
 
@@ -69,7 +58,7 @@ class Slime():
         if self.current_frames["death"] < len(frames) - 1:
             if pygame.time.get_ticks() - self.last_animation_death_time >= self.animation_death_interval:
                 self.object_rect = frames[self.current_frames["death"]].get_rect(centerx=self.object_rect.centerx, bottom=self.object_rect.bottom)
-                self.current_frame_slime = frames[self.current_frames["death"]]
+                self.current_frame_mob = frames[self.current_frames["death"]]
                 self.current_frames["death"] += 1
                 self.last_animation_death_time = pygame.time.get_ticks()
         else:
@@ -89,17 +78,10 @@ class Slime():
             self.states["direction_left"] = not self.states["direction_left"]
         else:
             self.object_rect.x += self.speed
-    
 
-    def get_direction(self):
-        if self.states["direction_right"]:
-            return "right"
-        elif self.states["direction_left"]:
-            return "left"
-    
 
     def copy(self):
-        return Slime(self.object_rect.centerx, self.object_rect.bottom, self.speed, self.ground_left, self.ground_right)
+        return Slime(self.object_rect.x, self.object_rect.bottom, self.speed, self.ground_left, self.ground_right)
 
         
     
