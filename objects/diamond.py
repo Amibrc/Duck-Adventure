@@ -6,7 +6,7 @@ class Diamond(MovedObject, AnimatedObject):
         MovedObject.__init__(self, centerx, bottom, None, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, 30)
         AnimatedObject.__init__(self, centerx, bottom, DIAMOND_IMAGES, 400)
         self.is_collected = False
-        self.type = "prop"
+        self.type = "entity"
     
     
     def update(self):

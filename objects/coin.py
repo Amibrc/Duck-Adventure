@@ -6,7 +6,7 @@ class Coin(MovedObject, AnimatedObject):
         MovedObject.__init__(self, centerx, bottom, None, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, 17)
         AnimatedObject.__init__(self, centerx, bottom, COIN_IMAGES, 300)
         self.is_collected = False
-        self.type = "prop"
+        self.type = "entity"
 
     
     def update(self):

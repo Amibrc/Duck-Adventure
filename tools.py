@@ -36,7 +36,7 @@ def collision_with_objects(character_rect, objects):
     for obj in objects:
         obj_rect = obj.object_rect
         
-        if obj.type == "prop":
+        if obj.type == "entity":
             collision_x = character_rect.right >= obj_rect.left and character_rect.left <= obj_rect.right
             collision_y = character_rect.bottom >= obj_rect.top and character_rect.top <= obj_rect.bottom
 
