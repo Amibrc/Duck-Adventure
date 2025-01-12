@@ -1,8 +1,5 @@
 import pygame
-from tools import (
-    get_display_settings,
-    collision_with_objects
-)
+from tools import collision_with_objects
 
 
 class MovementDuck():
@@ -50,7 +47,7 @@ class MovementDuck():
         while remaining_distance:
             self.collision_info = collision_with_objects(self.duck_rect, objects)
             for collision_data in self.collision_info:
-                if collision_data["object"].type != "prop":
+                if self.can_collide(collision_data):
                     if collision_data["collision_sides"]["right"]:
                         self.duck_rect.right = collision_data["obj_rect"].left
                         self.target_rect.right = collision_data["obj_rect"].left
@@ -72,7 +69,7 @@ class MovementDuck():
         while remaining_distance:
             self.collision_info = collision_with_objects(self.duck_rect, objects)
             for collision_data in self.collision_info:
-                if collision_data["object"].type != "prop":
+                if self.can_collide(collision_data):
                     if collision_data["collision_sides"]["left"]:
                         self.duck_rect.left = collision_data["obj_rect"].right
                         self.target_rect.left = collision_data["obj_rect"].right
@@ -117,7 +114,7 @@ class MovementDuck():
                 self.collision_info = collision_with_objects(self.duck_rect, objects)
 
                 for collision_data in self.collision_info:
-                    if collision_data["object"].type != "prop":
+                    if self.can_collide(collision_data):
                         if collision_data["on_object"] and self.vector_speed_vertical > 0:
                             self.duck_rect.bottom = collision_data["obj_rect"].top
                             self.target_rect.bottom = collision_data["obj_rect"].top
@@ -158,7 +155,7 @@ class MovementDuck():
     
     
     def update_collision_with_moved_objects(self, collision_data):
-        if collision_data["object"].type == "prop":
+        if collision_data["object"].type == "entity":
             if collision_data["collision_x"] and collision_data["collision_y"]:
                 collision_data["object"].is_collected = True
 
@@ -192,17 +189,21 @@ class MovementDuck():
 
 
     def update_collision_with_mobs(self, collision_data):
-        if collision_data["object"].type == "mob":
-            if collision_data["on_object"] and not self.states["is_dead"]:
-                self.duck_rect.bottom = collision_data["obj_rect"].top
-                self.target_rect.bottom = collision_data["obj_rect"].top
-                collision_data["object"].states["is_dead"] = True
-                self.start_jump()
-            elif collision_data["collision_sides"]["top"] and not self.states["is_dead"]:
-                self.duck_rect.top = collision_data["obj_rect"].bottom
-                self.target_rect.top = collision_data["obj_rect"].bottom
-                collision_data["object"].states["is_dead"] = True
-            elif collision_data["collision_sides"]["right"]:
+        if collision_data["object"].type == "mob" and not collision_data["object"].states["is_dead"]:
+            if not self.states["is_dead"]:
+                if collision_data["on_object"]:
+                    self.duck_rect.bottom = collision_data["obj_rect"].top
+                    self.target_rect.bottom = collision_data["obj_rect"].top
+                    collision_data["object"].states["is_dead"] = True
+                    self.start_jump()
+                    return
+                elif collision_data["collision_sides"]["top"]:
+                    self.duck_rect.top = collision_data["obj_rect"].bottom
+                    self.target_rect.top = collision_data["obj_rect"].bottom
+                    collision_data["object"].states["is_dead"] = True
+                    return
+        
+            if collision_data["collision_sides"]["right"]:
                 self.duck_rect.right = collision_data["obj_rect"].left
                 self.target_rect.right = collision_data["obj_rect"].left
                 self.states["is_dead"] = True
@@ -210,7 +211,6 @@ class MovementDuck():
                 self.duck_rect.left = collision_data["obj_rect"].right
                 self.target_rect.left = collision_data["obj_rect"].right
                 self.states["is_dead"] = True
-
 
 
     def update_collision_sides_with_static_objects(self, collision_data):
@@ -233,10 +233,10 @@ class MovementDuck():
                     self.duck_rect.left = collision_data["obj_rect"].right
                     self.target_rect.left = collision_data["obj_rect"].right
             if collision_data["object"].speed_y:
-                if collision_data["collision_sides"]["right"] and self.states["is_jumping"] and not self.on_platform:
+                if collision_data["collision_sides"]["right"] and self.states["is_jumping"]:
                     self.duck_rect.right = collision_data["obj_rect"].left
                     self.target_rect.right = collision_data["obj_rect"].left
-                elif collision_data["collision_sides"]["left"] and self.states["is_jumping"] and not self.on_platform:
+                elif collision_data["collision_sides"]["left"] and self.states["is_jumping"]:
                     self.duck_rect.left = collision_data["obj_rect"].right
                     self.target_rect.left = collision_data["obj_rect"].right
 
@@ -284,12 +284,7 @@ class MovementDuck():
                     self.moved_y = True
                 else:
                     return
-    
-
-    def set_level_size(self, level_width, level_height):
-        self.ground_right = level_width
-        self.ground_bottom = level_height
-            
+     
 
     def get_speed(self):
         if self.states["is_crouching"]:
@@ -297,3 +292,7 @@ class MovementDuck():
         elif self.states["is_running"]:
             return self.speed_running
         return self.speed_walking
+
+
+    def can_collide(self, collision_data):
+        return collision_data["object"].type not in ("entity", "mob") or (collision_data["object"].type == "mob" and not collision_data["object"].states["is_dead"])
