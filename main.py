@@ -15,13 +15,12 @@ SCREEN_WIDTH, SCREEN_HEIGHT, FPS = get_display_settings(True, True, True)
 clock = pygame.time.Clock()
 game_menu = GameMenu(SCREEN_WIDTH, SCREEN_HEIGHT)
 background = Background(SCREEN_WIDTH, SCREEN_HEIGHT)
+camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
+duck = Duck(*level_manager.current_level.start_pos, level_manager.all_level_objects, level_manager.current_level.get_level_size())
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Duck Adventure")
 pygame.display.set_icon(GAME_ICON_IMAGE)
-
-duck = Duck(80, SCREEN_HEIGHT, level_manager.all_level_objects, level_manager.current_level.get_level_size())
-camera = Camera(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 stage_game = "game_menu"
 game = True
@@ -30,12 +29,13 @@ while game:
         if event.type == pygame.QUIT:
             game = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                stage_game = "game_menu"
-            elif event.key == pygame.K_SPACE and stage_game == "playing":
-                duck.Movement.start_jump()
-            elif event.key == pygame.K_r and stage_game == "playing":
-                restart_level(level_manager, duck, SCREEN_HEIGHT)
+            if stage_game == "playing":
+                if event.key == pygame.K_ESCAPE:
+                    stage_game = "game_menu"
+                elif event.key == pygame.K_SPACE:
+                    duck.Movement.start_jump()
+                elif event.key == pygame.K_r:
+                    restart_level(level_manager, duck)
     
     if stage_game == "playing":
         keys = pygame.key.get_pressed()
@@ -45,11 +45,10 @@ while game:
         level_manager.draw(window, camera)
         
         if level_manager.check_win_condition():
-            duck.update_to_next_level(level_manager.all_level_objects, level_manager.current_level.get_level_size())
+            duck.update_to_next_level(level_manager.all_level_objects, level_manager.current_level.get_level_size(), *level_manager.current_level.start_pos)
 
         duck.update(keys, level_manager.all_level_objects)
         camera.update(duck.Movement.target_rect, level_manager.current_level.level_width, level_manager.current_level.level_height)
-        duck.Movement.ground_right = level_manager.current_level.level_width
         level_manager.update()
         background.update(camera)
 

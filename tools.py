@@ -3,11 +3,9 @@ from json import load
 from config.paths import DISPLAY_CONFIG_PATH
 
 
-def restart_level(level_manager, duck, SCREEN_HEIGHT):
-    duck.states["is_dead"] = False
-    duck.states["direction_right"] = True
-    duck.states["direction_left"] = False
-    duck.set_position(80, SCREEN_HEIGHT)
+def restart_level(level_manager, duck):
+    duck.reset_states()
+    duck.set_position(*level_manager.current_level.start_pos)
     level_manager.restart_level()
     duck.Movement.target_rect.center = duck.duck_rect.center
     duck.set_objects(level_manager.all_level_objects)
