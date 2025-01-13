@@ -67,9 +67,8 @@ class Duck():
         self.Movement.update_collisions_and_gravity(objects)
     
 
-    def update_to_next_level(self, objects, level_size, centerx=80, bottom=None):
-        if not bottom:
-            bottom = level_size[1]
+    def update_to_next_level(self, objects, level_size, centerx, bottom):
+        self.reset_states()
         self.set_objects(objects)
         self.set_position(centerx, bottom)
         self.set_level_size(level_size)
@@ -82,12 +81,26 @@ class Duck():
     def set_position(self, centerx, bottom):
         self.duck_rect.centerx = centerx
         self.duck_rect.bottom = bottom
-        self.Movement.target_rect.center = self.duck_rect.center
+        self.Movement.target_rect.centerx = centerx
+        self.Movement.target_rect.bottom = bottom
         self.update_duck_rect()
     
 
     def set_level_size(self, level_size):
         self.Movement.ground_right, self.Movement.ground_bottom = level_size
+    
+
+    def reset_states(self):
+        self.states["direction_right"] = True
+        self.states["direction_left"] = False
+        self.states["is_idle"] = True
+        self.states["is_middle_idle"] = False
+        self.states["is_walking"] = False
+        self.states["is_running"] = False
+        self.states["is_crouching"] = False
+        self.states["is_jumping"] = False
+        self.states["is_rude"] = False
+        self.states["is_dead"] = False
     
 
     def draw(self, surface, camera):
