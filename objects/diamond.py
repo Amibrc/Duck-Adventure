@@ -1,21 +1,9 @@
-from .base import MovedObject, AnimatedObject
+from .base import Entity
 from config.images import DIAMOND_IMAGES
 
-class Diamond(MovedObject, AnimatedObject):
+class Diamond(Entity):
     def __init__(self, centerx, bottom, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top):
-        MovedObject.__init__(self, centerx, bottom, None, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, 30)
-        AnimatedObject.__init__(self, centerx, bottom, DIAMOND_IMAGES, 400)
-        self.is_collected = False
-        self.type = "entity"
-    
-    
-    def update(self):
-        MovedObject.update(self)
-        AnimatedObject.update_animation(self)
-
-
-    def draw(self, surface):
-        AnimatedObject.draw(self, surface)
+        super().__init__(centerx, bottom, DIAMOND_IMAGES, 400, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, 30)
     
 
     def copy(self):
