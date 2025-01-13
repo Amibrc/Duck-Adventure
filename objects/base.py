@@ -76,3 +76,20 @@ class AnimatedObject():
     
     def draw(self, surface):
         surface.blit(self.current_animation, self.object_rect)
+
+
+class Entity(MovedObject, AnimatedObject):
+    def __init__(self, centerx, bottom, animation_frames, animation_interval, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, move_interval=0):
+        MovedObject.__init__(self, centerx, bottom, None, speed_x, speed_y, ground_left, ground_right, ground_bottom, ground_top, move_interval)
+        AnimatedObject.__init__(self, centerx, bottom, animation_frames, animation_interval)
+        self.is_collected = False
+        self.type = "entity"
+        
+
+    def update(self):
+        MovedObject.update(self)
+        AnimatedObject.update_animation(self)
+    
+
+    def draw(self, surface):
+        AnimatedObject.draw(surface)
