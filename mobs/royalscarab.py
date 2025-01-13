@@ -23,14 +23,14 @@ class RoyalScarab(Mob):
         self.last_animation_death_time = 0
 
         self.animation_walking_interval = 150
-        self.animation_death_interval = 4000
+        self.animation_death_interval = 1300
 
         self.death_animation_ended = False
 
         self.jump_force = 10
         self.vector_speed_vertical = 0
         self.gravity = 1
-    
+        
 
     def draw(self, surface):
         surface.blit(self.current_frame_mob, self.object_rect)

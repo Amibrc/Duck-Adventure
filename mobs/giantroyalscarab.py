@@ -23,7 +23,7 @@ class GiantRoyalScarab(Mob):
         self.last_animation_death_time = 0
 
         self.animation_walking_interval = 150
-        self.animation_death_interval = 4000
+        self.animation_death_interval = 1300
 
         self.death_animation_ended = False
 
