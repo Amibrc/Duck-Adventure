@@ -66,12 +66,12 @@ class Slime(Mob):
 
 
     def move(self):
-        if self.object_rect.right + self.speed > self.ground_right:
+        if self.object_rect.right + self.speed >= self.ground_right:
             self.object_rect.right = self.ground_right
             self.speed = -self.speed
             self.states["direction_right"] = not self.states["direction_right"]
             self.states["direction_left"] = not self.states["direction_left"]
-        elif self.object_rect.left + self.speed < self.ground_left:
+        elif self.object_rect.left + self.speed <= self.ground_left:
             self.object_rect.left = self.ground_left
             self.speed = -self.speed
             self.states["direction_right"] = not self.states["direction_right"]
