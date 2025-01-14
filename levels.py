@@ -282,7 +282,8 @@ level_2 = Level(
 
     ],
     mobs=[
-        GiantRoyalScarab(200, SCREEN_HEIGHT, 4, 150, 500)
+        GiantRoyalScarab(200, SCREEN_HEIGHT, 4, 150, 500),
+        Bee(50, SCREEN_HEIGHT - 170, 3, 0, 150)
     ],
     coins=[
 

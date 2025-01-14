@@ -113,3 +113,18 @@ QUIT_BUTTON_PATHS = (
     ASSETS_DIR / "Menu" / "Quit_Button" / "quit_button 002.png",
     ASSETS_DIR / "Menu" / "Quit_Button" / "quit_button 003.png"
 )
+
+
+BEE_WALKING_PATHS = (
+    ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 001.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 002.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 003.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 004.png"
+)
+
+BEE_DEATH_PATHS = (
+    ASSETS_DIR / "Mobs" / "Bee" / "Death" / "Bee_Death 001.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Death" / "Bee_Death 002.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Death" / "Bee_Death 003.png",
+    ASSETS_DIR / "Mobs" / "Bee" / "Death" / "Bee_Death 004.png"
+)
