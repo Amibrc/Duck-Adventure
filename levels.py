@@ -165,8 +165,9 @@ level_test = Level(
     ],
     level_size=(1500, 600),
     start_pos=(80, SCREEN_HEIGHT),
-    win_condition="mobs"
+    win_condition=None
 )
+
 
 level_1 = Level(
     objects=[
@@ -277,19 +278,51 @@ level_2 = Level(
         StaticObject(0, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(32, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
         StaticObject(64, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(96, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
         StaticObject(128, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(160, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
-        StaticObject(128, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(160, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
         StaticObject(192, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(224, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
+        StaticObject(256, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(288, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
+        StaticObject(320, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(352, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
+        StaticObject(384, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(416, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
+        StaticObject(448, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE), StaticObject(480, SCREEN_HEIGHT - 70, GREY_BRICK_IMAGE),
+
+        MovedObject(512, SCREEN_HEIGHT - 70, STONE_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 102),
+        MovedObject(544, SCREEN_HEIGHT - 70, STONE_IMAGE, 0, 2, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 102),
+
+        StaticObject(208, SCREEN_HEIGHT - 172, GREY_BRICK_IMAGE), StaticObject(240, SCREEN_HEIGHT - 172, GREY_BRICK_IMAGE),
+        StaticObject(272, SCREEN_HEIGHT - 172, GREY_BRICK_IMAGE), StaticObject(304, SCREEN_HEIGHT - 172, GREY_BRICK_IMAGE),
+
+        StaticObject(864, SCREEN_HEIGHT, GREY_BRICK_IMAGE),
+        StaticObject(896, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(896, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(928, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(928, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(960, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(960, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(992, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(992, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(1024, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(1024, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(1056, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(1056, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(1088, SCREEN_HEIGHT, GREY_BRICK_IMAGE), StaticObject(1088, SCREEN_HEIGHT - 32, GREY_BRICK_IMAGE),
+        StaticObject(1120, SCREEN_HEIGHT, GREY_BRICK_IMAGE)
+        
 
     ],
     mobs=[
-        GiantRoyalScarab(200, SCREEN_HEIGHT, 4, 150, 500),
-        Bee(50, SCREEN_HEIGHT - 170, 3, 0, 150)
+        RoyalScarab(208, SCREEN_HEIGHT - 204, 1, 208, 336),
+        Bee(502, SCREEN_HEIGHT - 42, -4, 0, 502)
     ],
     coins=[
+        Coin(224, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(272, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
+        Coin(320, SCREEN_HEIGHT - 102, 0, 1, 0, 0, SCREEN_HEIGHT - 102, SCREEN_HEIGHT - 134),
 
+        Coin(224, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 204, SCREEN_HEIGHT - 236),
+        Coin(272, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 204, SCREEN_HEIGHT - 236),
+        Coin(320, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 204, SCREEN_HEIGHT - 236),
+
+        Coin(944, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 64, SCREEN_HEIGHT - 96),
+        Coin(1008, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 64, SCREEN_HEIGHT - 96),
+        Coin(1072, SCREEN_HEIGHT - 204, 0, 1, 0, 0, SCREEN_HEIGHT - 64, SCREEN_HEIGHT - 96),
     ],
     diamonds=[
-        Diamond(16, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
+        Diamond(16, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40),
+        Diamond(2000, SCREEN_HEIGHT, 0, 1, 0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT - 40)
+
     ],
     level_size=(2000, SCREEN_HEIGHT),
     start_pos=(80, SCREEN_HEIGHT - 102),
@@ -298,4 +331,4 @@ level_2 = Level(
 
 
 
-level_manager = LevelManager((level_1, level_2, level_test))
+level_manager = LevelManager((level_2, level_test))
