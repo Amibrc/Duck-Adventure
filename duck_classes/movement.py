@@ -3,7 +3,7 @@ from tools import collision_with_objects
 
 
 class MovementDuck():
-    def __init__(self, duck_rect : pygame.Rect, states, objects, level_size):
+    def __init__(self, duck_rect, states, objects, level_size):
         self.duck_rect = duck_rect
         self.states = states
         self.objects = objects
@@ -156,7 +156,7 @@ class MovementDuck():
     
     def update_collision_with_moved_objects(self, collision_data):
         if collision_data["object"].type == "entity":
-            if collision_data["collision_x"] and collision_data["collision_y"]:
+            if collision_data["collision_x"] and collision_data["collision_y"] and not self.states["is_dead"]:
                 collision_data["object"].is_collected = True
 
         elif collision_data["object"].type == "moved":
@@ -197,7 +197,7 @@ class MovementDuck():
                     collision_data["object"].states["is_dead"] = True
                     self.start_jump()
                     return
-                elif collision_data["collision_sides"]["top"]:
+                elif collision_data["collision_sides"]["top"] and self.states["is_jumping"]:
                     self.duck_rect.top = collision_data["obj_rect"].bottom
                     self.target_rect.top = collision_data["obj_rect"].bottom
                     collision_data["object"].states["is_dead"] = True
