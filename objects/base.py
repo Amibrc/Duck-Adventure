@@ -32,19 +32,19 @@ class MovedObject(StaticObject):
         if pygame.time.get_ticks() - self.last_move_time >= self.move_interval:
             if self.speed_x:
                 self.object_rect.x += self.speed_x
-                if self.object_rect.right > self.ground_right:
+                if self.object_rect.right >= self.ground_right:
                     self.object_rect.right = self.ground_right
                     self.speed_x = -self.speed_x
-                elif self.object_rect.left < self.ground_left:
+                elif self.object_rect.left <= self.ground_left:
                     self.object_rect.left = self.ground_left
                     self.speed_x = -self.speed_x
 
             if self.speed_y:
                 self.object_rect.y += self.speed_y
-                if self.object_rect.bottom > self.ground_bottom:
+                if self.object_rect.bottom >= self.ground_bottom:
                     self.object_rect.bottom = self.ground_bottom
                     self.speed_y = -self.speed_y
-                elif self.object_rect.top < self.ground_top:
+                elif self.object_rect.top <= self.ground_top:
                     self.object_rect.top = self.ground_top
                     self.speed_y = -self.speed_y
             self.last_move_time = pygame.time.get_ticks()
