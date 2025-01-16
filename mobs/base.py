@@ -102,5 +102,3 @@ class SimpleMob(Mob):
         else:
             self.object_rect.x += self.speed
 
-
-        
