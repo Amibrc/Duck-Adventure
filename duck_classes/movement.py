@@ -87,14 +87,14 @@ class MovementDuck():
 
     def start_jump(self):
         if not self.states["is_dead"]:
-            if self.duck_rect.bottom >= self.ground_bottom - 5:
+            if self.duck_rect.bottom >= self.ground_bottom:
                 if self.states["is_crouching"]:
                     self.vector_speed_vertical = -self.jump_force // 1.5
                 else:
                     self.vector_speed_vertical = -self.jump_force
                 self.states["is_jumping"] = True
 
-            elif self.duck_rect.bottom < self.ground_bottom - 5 and not self.states["is_jumping"]:
+            elif self.duck_rect.bottom < self.ground_bottom and not self.states["is_jumping"]:
                 if self.states["is_crouching"]:
                     self.vector_speed_vertical = -self.jump_force // 1.5
                 else:
