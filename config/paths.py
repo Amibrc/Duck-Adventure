@@ -115,7 +115,7 @@ QUIT_BUTTON_PATHS = (
 )
 
 
-BEE_WALKING_PATHS = (
+BEE_FLYING_PATHS = (
     ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 001.png",
     ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 002.png",
     ASSETS_DIR / "Mobs" / "Bee" / "Flying" / "Bee_Flying 003.png",
